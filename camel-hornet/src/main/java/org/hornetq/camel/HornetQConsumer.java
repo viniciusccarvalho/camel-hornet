@@ -16,40 +16,61 @@
  */
 package org.hornetq.camel;
 
-import java.util.Date;
+import javax.jms.Connection;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.MessageConsumer;
+import javax.jms.MessageListener;
+import javax.jms.Session;
 
-import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.apache.camel.impl.ScheduledPollConsumer;
+import org.apache.camel.impl.DefaultConsumer;
 
 /**
  * The HelloWorld consumer.
  */
-public class HornetQConsumer extends ScheduledPollConsumer {
+public class HornetQConsumer extends DefaultConsumer {
     private final HornetQEndpoint endpoint;
+    private MessageConsumer consumer;
 
     public HornetQConsumer(HornetQEndpoint endpoint, Processor processor) {
         super(endpoint, processor);
         this.endpoint = endpoint;
     }
 
-    @Override
-    protected int poll() throws Exception {
-        Exchange exchange = endpoint.createExchange();
+	@Override
+	protected void doStop() throws Exception {
+		super.doStop();
+	}
 
-        // create a message body
-        Date now = new Date();
-        exchange.getIn().setBody("Hello World! The time is " + now);
+	@Override
+	protected void doStart() throws Exception {
+		super.doStart();
+	}
 
-        try {
-            // send message to next processor in the route
-            getProcessor().process(exchange);
-            return 1; // number of messages polled
-        } finally {
-            // log exception if an exception occurred and was not handled
-            if (exchange.getException() != null) {
-                getExceptionHandler().handleException("Error processing exchange", exchange, exchange.getException());
-            }
-        }
-    }
+	
+	private void createConsumer(){
+		Connection conn = endpoint.getConnection();
+		try {
+			Session session = conn.createSession(false, Session.CLIENT_ACKNOWLEDGE);
+			this.consumer = session.createConsumer(endpoint.getDestination());
+			consumer.setMessageListener(null);
+			conn.start();
+			
+			
+		} catch (JMSException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+  
+	public static class HornetQListener implements MessageListener{
+
+		@Override
+		public void onMessage(Message message) {
+			
+		}
+		
+	}
 }

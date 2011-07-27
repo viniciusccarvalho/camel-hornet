@@ -28,7 +28,14 @@
 
   <name>A Camel Component</name>
   <url>http://www.myorganization.org</url>
-
+	
+  <repositories>
+  <repository>
+        <id>repository.jboss.org</id>
+        <name>JBoss.org Maven repository</name>
+        <url>http://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+    </repository>
+  </repositories>	
   <dependencies>
     <dependency>
       <groupId>org.apache.camel</groupId>
@@ -66,6 +73,21 @@
       <artifactId>log4j</artifactId> 
       <version>1.2.16</version> 
     </dependency>
+    <dependency>
+    	<groupId>org.hornetq</groupId>
+    	<artifactId>hornetq-jms</artifactId>
+    	<version>2.2.5.Final</version>
+    </dependency>
+    <dependency>
+    	<groupId>org.hornetq</groupId>
+    	<artifactId>hornetq-core-client</artifactId>
+    	<version>2.2.5.Final</version>
+    </dependency>
+  <dependency>
+    <groupId>javax.jms</groupId>
+    <artifactId>jms</artifactId>
+    <version>1.1</version>
+</dependency>
   </dependencies>
 
   <build>

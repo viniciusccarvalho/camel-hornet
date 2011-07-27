@@ -35,8 +35,8 @@ public class HelloWorldComponentTest extends CamelTestSupport {
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() {
-                from("helloworld://foo")    // will send a message every 500ms
-                  .to("helloworld://bar")   // prints message to stdout
+                from("hornetq://foo")    // will send a message every 500ms
+                  .to("hornetq://bar")   // prints message to stdout
                   .to("mock:result");       // to actually test that a message arrives
             }
         };

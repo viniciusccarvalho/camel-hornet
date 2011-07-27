@@ -19,6 +19,9 @@ package org.hornetq.camel;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import javax.jms.Connection;
+import javax.jms.Destination;
+
 import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
@@ -29,7 +32,10 @@ import org.apache.camel.impl.DefaultEndpoint;
  * Represents a HelloWorld endpoint.
  */
 public class HornetQEndpoint extends DefaultEndpoint {
-    public HornetQEndpoint() {
+    
+	private Destination destination;
+	
+	public HornetQEndpoint() {
     }
 
     public HornetQEndpoint(String uri, HornetQComponent component) {
@@ -51,4 +57,12 @@ public class HornetQEndpoint extends DefaultEndpoint {
     public boolean isSingleton() {
         return true;
     }
+    
+    public Connection getConnection(){
+    	return null;
+    }
+
+	public Destination getDestination() {
+		return destination;
+	}
 }
