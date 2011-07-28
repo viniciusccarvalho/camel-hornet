@@ -16,6 +16,10 @@
  */
 package org.hornetq.camel;
 
+import javax.jms.JMSException;
+import javax.jms.MessageProducer;
+import javax.jms.Session;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.impl.DefaultConsumer;
 import org.apache.camel.impl.DefaultProducer;
@@ -28,14 +32,21 @@ import org.slf4j.LoggerFactory;
 public class HornetQProducer extends DefaultProducer {
     private static final transient Logger LOG = LoggerFactory.getLogger(HornetQProducer.class);
     private HornetQEndpoint endpoint;
+    private MessageProducer producer;
 
     public HornetQProducer(HornetQEndpoint endpoint) {
         super(endpoint);
         this.endpoint = endpoint;
+        try {
+			this.producer = endpoint.getCachedConnectionFactory().createSession(false, Session.AUTO_ACKNOWLEDGE).createProducer(endpoint.getDestination());
+		} catch (JMSException e) {
+			e.printStackTrace();
+		}
     }
 
     public void process(Exchange exchange) throws Exception {
         System.out.println(exchange.getIn().getBody());    
+        
     }
 
 }

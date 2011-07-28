@@ -88,6 +88,11 @@
     <artifactId>jms</artifactId>
     <version>1.1</version>
 </dependency>
+  <dependency>
+  	<groupId>org.jboss.netty</groupId>
+  	<artifactId>netty</artifactId>
+  	<version>3.2.3.Final</version>
+  </dependency>
   </dependencies>
 
   <build>

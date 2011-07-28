@@ -57,11 +57,11 @@ public class HornetQEndpoint extends DefaultEndpoint {
     public boolean isSingleton() {
         return true;
     }
-    
-    public Connection getConnection(){
-    	return null;
+   
+    public CachedConnectionFactory getCachedConnectionFactory(){
+    	return ((HornetQComponent)getComponent()).getConnectionFactory();
     }
-
+   
 	public Destination getDestination() {
 		return destination;
 	}

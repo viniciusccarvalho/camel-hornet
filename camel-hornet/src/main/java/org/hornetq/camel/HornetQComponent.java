@@ -25,10 +25,19 @@ import org.apache.camel.impl.DefaultComponent;
  * Represents the component that manages {@link HornetQEndpoint}.
  */
 public class HornetQComponent extends DefaultComponent {
-
+	
+	private CachedConnectionFactory connectionFactory;
+	
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
         Endpoint endpoint = new HornetQEndpoint(uri, this);
         setProperties(endpoint, parameters);
         return endpoint;
     }
+
+	public CachedConnectionFactory getConnectionFactory() {
+		return connectionFactory;
+	}
+
+
+    
 }

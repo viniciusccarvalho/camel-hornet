@@ -32,7 +32,7 @@ import org.apache.camel.impl.DefaultConsumer;
 public class HornetQConsumer extends DefaultConsumer {
     private final HornetQEndpoint endpoint;
     private MessageConsumer consumer;
-
+    private Session session;
     public HornetQConsumer(HornetQEndpoint endpoint, Processor processor) {
         super(endpoint, processor);
         this.endpoint = endpoint;
@@ -41,25 +41,36 @@ public class HornetQConsumer extends DefaultConsumer {
 	@Override
 	protected void doStop() throws Exception {
 		super.doStop();
+		if(consumer != null){
+			try {
+				consumer.close();
+			} catch (Exception e) {
+				throw e;
+			}
+		}
+		if(session != null){
+			try {
+				session.close();
+			} catch (Exception e) {
+				throw e;
+			}
+		}
+		
 	}
 
 	@Override
 	protected void doStart() throws Exception {
 		super.doStart();
+		createConsumer();
 	}
 
 	
 	private void createConsumer(){
-		Connection conn = endpoint.getConnection();
 		try {
-			Session session = conn.createSession(false, Session.CLIENT_ACKNOWLEDGE);
-			this.consumer = session.createConsumer(endpoint.getDestination());
-			consumer.setMessageListener(null);
-			conn.start();
-			
-			
+			session = endpoint.getCachedConnectionFactory().createSession(false, Session.AUTO_ACKNOWLEDGE);
+			consumer = session.createConsumer(endpoint.getDestination());
+			consumer.setMessageListener(new HornetQListener());
 		} catch (JMSException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
